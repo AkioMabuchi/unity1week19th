@@ -29,27 +29,27 @@ MonoBehaviour:
     referenceMode: 2
     serializationDepthLimit: 64
     assemblyNames:
-    - Assembly-CSharp-firstpass
-    - PhotonUnityNetworking.Demos
-    - Assembly-CSharp
     - PhotonUnityNetworking.Utilities
-    - PhotonChat
-    - PhotonUnityNetworking
-    - PhotonRealtime
-    - UniRx
-    - UniRx.Examples
-    - UniTask.Linq
+    - Assembly-CSharp
     - UniTask
-    - UniTask.TextMeshPro
+    - Assembly-CSharp-firstpass
+    - UniRx
+    - PhotonUnityNetworking.Demos
+    - PhotonUnityNetworking
+    - UniTask.Linq
+    - PhotonChat
+    - PhotonRealtime
     - UniTask.DOTween
+    - UniRx.Examples
+    - UniTask.TextMeshPro
     - UniTask.Addressables
-    - PsdPlugin
     - PhotonUnityNetworking.Editor
-    - PunDemos.DemoSlotcarEditor
+    - PsdPlugin
+    - UniTask.Editor
     - PhotonUnityNetworking.Utilities.PhotonPlayer.Editor
+    - PunDemos.DemoSlotcarEditor
     - PhotonUnityNetworking.Utilities.Culling.Editor
     - PunDemos.DemoHubEditor
-    - UniTask.Editor
     showAdvancedSettings: 0
   addMgrToSceneAutomatically: 0
   autoUpdateReferences: 1
