@@ -10,6 +10,7 @@ public class SoundPlayer : SingletonMonoBehaviour<SoundPlayer>
     
     public void PlaySound(int index)
     {
-        Instantiate(prefabSound).GetComponent<Sound>().Initialize(audioClips[index]);
+        Instantiate(prefabSound, Vector3.zero, Quaternion.identity, transform).GetComponent<Sound>()
+            .Initialize(audioClips[index]);
     }
 }

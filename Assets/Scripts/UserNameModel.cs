@@ -17,7 +17,7 @@ public class UserNameModel : SingletonMonoBehaviour<UserNameModel>
         }
         else
         {
-            string userName = "勇者" + UnityEngine.Random.Range(0, 10000).ToString("D4");
+            string userName = "Yusha" + UnityEngine.Random.Range(0, 10000).ToString("D4");
             _userName.Value = userName;
             ES3.Save(userNameKey, userName);
         }

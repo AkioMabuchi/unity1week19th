@@ -14,6 +14,11 @@ public class SettingsSceneManager : PresenterMonoBehaviour
             SoundVolumeModel.Instance.SetSoundVolume(value);
         }));
         
+        Disposables.Add(GroupSettings.Instance.OnClickAvatar.Subscribe(id =>
+        {
+            AvatarModel.Instance.SetAvatarId(id);
+        }));
+        
         Disposables.Add(GroupSettings.Instance.OnPointerUpSound.Subscribe(_ =>
         {
             // 効果音調整用のスライダーが離されると、テスト効果音を鳴らす。
@@ -22,6 +27,7 @@ public class SettingsSceneManager : PresenterMonoBehaviour
         
         Disposables.Add(GroupSettings.Instance.OnClickFinish.Subscribe(_ =>
         {
+            SoundPlayer.Instance.PlaySound(2);
             SceneController.Instance.ChangeScene("SettingsScene", "TitleScene");
         }));
         
@@ -33,6 +39,11 @@ public class SettingsSceneManager : PresenterMonoBehaviour
         Disposables.Add(SoundVolumeModel.Instance.SoundVolume.Subscribe(value =>
         {
             GroupSettings.Instance.SetSoundVolume(value);
+        }));
+        
+        Disposables.Add(AvatarModel.Instance.AvatarId.Subscribe(id =>
+        {
+            GroupSettings.Instance.SetAvatarId(id);
         }));
     }
 }

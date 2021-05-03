@@ -8,6 +8,9 @@ using UnityEngine.UI;
 
 public class GroupPrepare : SingletonMonoBehaviour<GroupPrepare>
 {
+    [SerializeField] private Sprite spriteCardDummy;
+    [SerializeField] private Sprite[] spriteCards;
+    
     [SerializeField] private GameObject gameObjectTextMeshProQuantity;
     [SerializeField] private GameObject gameObjectTextMeshProCosts;
     [SerializeField] private GameObject gameObjectTextMeshProCost;
@@ -59,6 +62,7 @@ public class GroupPrepare : SingletonMonoBehaviour<GroupPrepare>
     private int _page;
 
     private int[] _cardDeck = new int[100];
+    
 
     private void OnEnable()
     {
@@ -128,6 +132,7 @@ public class GroupPrepare : SingletonMonoBehaviour<GroupPrepare>
             _textMeshProCost.text = "コスト: " + _cards[i].cost;
             _textMeshProMaximum.text = "最大枚数: " + maximum;
             _textMeshProDescription.text = _cards[i].description;
+            _imageCard.sprite = spriteCards[i];
         }
     }
 
@@ -136,6 +141,7 @@ public class GroupPrepare : SingletonMonoBehaviour<GroupPrepare>
         _textMeshProCost.text = "コスト: -";
         _textMeshProMaximum.text = "最大枚数: -";
         _textMeshProDescription.text = "（カードネームにマウスカーソルを乗せて、カードの詳細を表示）";
+        _imageCard.sprite = spriteCardDummy;
     }
 
     public void SetCards(Card[] cards)
@@ -194,10 +200,12 @@ public class GroupPrepare : SingletonMonoBehaviour<GroupPrepare>
         }
 
         _textMeshProQuantity.text = "カード枚数: " + amount + " / 50";
-        _textMeshProCosts.text = "カードコスト: " + cost + " / 10";
+        _textMeshProCosts.text = "カードコスト: " + cost + " / 20";
 
         _buttonPrev.interactable = _page > 0;
         _buttonNext.interactable = _page * 7 + 7 < _cards.Length;
+
+        _buttonLogin.interactable = amount == 50 && cost <= 20 && _inputFieldUserName.text != "";
     }
 
     public void SetCardDeck(int[] cardDeck)
@@ -209,6 +217,7 @@ public class GroupPrepare : SingletonMonoBehaviour<GroupPrepare>
     public void SetUserName(string userName)
     {
         _inputFieldUserName.text = userName;
+        DrawCardList();
     }
 
     public void OnDeselectInputFieldUserName()

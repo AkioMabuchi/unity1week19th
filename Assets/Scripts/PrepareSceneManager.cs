@@ -20,6 +20,7 @@ public class PrepareSceneManager : PresenterMonoBehaviour
 
         Disposables.Add(GroupPrepare.Instance.OnClickReturn.Subscribe(_ =>
         {
+            SoundPlayer.Instance.PlaySound(2);
             SceneController.Instance.ChangeScene("PrepareScene", "TitleScene");
         }));
 
@@ -45,6 +46,7 @@ public class PrepareSceneManager : PresenterMonoBehaviour
         
         Disposables.Add(GroupPrepare.Instance.OnClickLogin.Subscribe(_ =>
         {
+            SoundPlayer.Instance.PlaySound(1);
             SceneController.Instance.ChangeScene("PrepareScene", "MainScene");
         }));
     }

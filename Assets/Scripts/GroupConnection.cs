@@ -8,8 +8,12 @@ using UniRx;
 
 public class GroupConnection : SingletonMonoBehaviour<GroupConnection>
 {
+    [SerializeField] private Sprite[] spritesAvatar;
     [SerializeField] private GameObject gameObjectImageBackground;
+    
     [SerializeField] private GameObject gameObjectButtonReturn;
+    [SerializeField] private GameObject gameObjectButtonReconnect;
+    
     [SerializeField] private GameObject gameObjectTextMeshProServerConnection;
     [SerializeField] private GameObject gameObjectTextMeshProMatchMaking;
 
@@ -19,8 +23,7 @@ public class GroupConnection : SingletonMonoBehaviour<GroupConnection>
     [SerializeField] private GameObject gameObjectImageOpponentAvatar;
 
     [SerializeField] private GameObject gameObjectTextMeshProCountDown;
-
-    private Button _buttonReturn;
+    
     private TextMeshProUGUI _textMeshProServerConnection;
     private TextMeshProUGUI _textMeshProMatchMaking;
 
@@ -37,7 +40,6 @@ public class GroupConnection : SingletonMonoBehaviour<GroupConnection>
 
     private void OnEnable()
     {
-        _buttonReturn = gameObjectButtonReturn.GetComponent<Button>();
         _textMeshProServerConnection = gameObjectTextMeshProServerConnection.GetComponent<TextMeshProUGUI>();
         _textMeshProMatchMaking = gameObjectTextMeshProMatchMaking.GetComponent<TextMeshProUGUI>();
 
@@ -111,7 +113,16 @@ public class GroupConnection : SingletonMonoBehaviour<GroupConnection>
 
     public void DisableReturnButton()
     {
-        _buttonReturn.interactable = false;
+        gameObjectButtonReturn.SetActive(false);
+    }
+
+    public void EnableReconnectButton()
+    {
+        gameObjectButtonReconnect.SetActive(true);
+    }
+    public void DisableReconnectButton()
+    {
+        gameObjectButtonReconnect.SetActive(false);
     }
 
     public void ShowOpponentInformation(string userName, int avatarId)
@@ -122,6 +133,7 @@ public class GroupConnection : SingletonMonoBehaviour<GroupConnection>
         gameObjectImageOpponentAvatar.SetActive(true);
 
         _textMeshProOpponentName.text = userName;
+        _imageOpponentAvatar.sprite = spritesAvatar[avatarId];
     }
 
     public void HideOpponentInformation()
