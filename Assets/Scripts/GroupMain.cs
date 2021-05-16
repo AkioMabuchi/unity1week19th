@@ -39,6 +39,10 @@ public class GroupMain : SingletonMonoBehaviour<GroupMain>
     [SerializeField] private GameObject gameObjectImageCallSmall;
     [SerializeField] private GameObject gameObjectTextMeshProCallSmall;
 
+    [SerializeField] private GameObject gameObjectImageDescriptionForm;
+    [SerializeField] private GameObject gameObjectTextMeshProCardName;
+    [SerializeField] private GameObject gameObjectTextMeshProCardDescription;
+
     private readonly TextMeshProUGUI[] _textMeshProsFighterUserName = new TextMeshProUGUI[2];
     private readonly TextMeshProUGUI[] _textMeshProsFighterHp = new TextMeshProUGUI[2];
     private readonly TextMeshProUGUI[] _textMeshProsFighterSword = new TextMeshProUGUI[2];
@@ -54,6 +58,9 @@ public class GroupMain : SingletonMonoBehaviour<GroupMain>
     
     private TextMeshProUGUI _textMeshProCall;
     private TextMeshProUGUI _textMeshProCallSmall;
+
+    private TextMeshProUGUI _textMeshProCardName;
+    private TextMeshProUGUI _textMeshProCardDescription;
     
     private readonly TextMeshProUGUI[] _textMeshProsAnnounce = new TextMeshProUGUI[10];
     private readonly Subject<Unit> _onEndDiscard = new Subject<Unit>();
@@ -100,6 +107,9 @@ public class GroupMain : SingletonMonoBehaviour<GroupMain>
         {
             _textMeshProsAnnounce[i] = gameObjectsTextMeshProsAnnounce[i].GetComponent<TextMeshProUGUI>();
         }
+
+        _textMeshProCardName = gameObjectTextMeshProCardName.GetComponent<TextMeshProUGUI>();
+        _textMeshProCardDescription = gameObjectTextMeshProCardDescription.GetComponent<TextMeshProUGUI>();
     }
 
     public void DrawFighterUserName(string userName, int index)
@@ -238,7 +248,7 @@ public class GroupMain : SingletonMonoBehaviour<GroupMain>
             switch (condition)
             {
                 case FighterCondition.Burned:
-                    text = "<color=#F2A561>火傷で攻撃力が1低下しています</color>";
+                    text = "<color=#F2A561>火傷で斬撃攻撃力が1低下しています</color>";
                     break;
                 case FighterCondition.Paralysis:
                     text = "<color=#F2E555>麻痺で1枚だけカードを選択できます</color>";
@@ -420,12 +430,25 @@ public class GroupMain : SingletonMonoBehaviour<GroupMain>
                 _textMeshProsAnnounce[i - 1].text = _textMeshProsAnnounce[i].text;
             }
 
-            _textMeshProsAnnounce[10].text = text;
+            _textMeshProsAnnounce[9].text = text;
         }
     }
 
     public void HideAnnounceBoard()
     {
         gameObjectImageAnnounce.SetActive(false);
+    }
+
+    public void ShowDescription(string cardName, string description)
+    {
+        _textMeshProCardName.text = cardName;
+        _textMeshProCardDescription.text = description;
+        
+        gameObjectImageDescriptionForm.SetActive(true);
+    }
+
+    public void HideDescription()
+    {
+        gameObjectImageDescriptionForm.SetActive(false);
     }
 }

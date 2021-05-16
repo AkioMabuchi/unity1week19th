@@ -48,6 +48,17 @@ public class ActionQueryModel : SingletonMonoBehaviour<ActionQueryModel>
     private readonly int[] _conditionBurned = {0, 0};
     private readonly int[] _conditionParalysis = {0, 0};
     private readonly int[] _conditionFrozen = {0, 0};
+
+    public void Initialize()
+    {
+        for (int i = 0; i < 2; i++)
+        {
+            _conditionBurned[i] = 0;
+            _conditionParalysis[i] = 0;
+            _conditionFrozen[i] = 0;
+        }
+    }
+    
     public List<ActionQuery> GenerateActionQueries(QueryInformation playerQueryInformation, QueryInformation opponentQueryInformation)
     {
         List<ActionQuery> queries = new List<ActionQuery>();
@@ -301,17 +312,20 @@ public class ActionQueryModel : SingletonMonoBehaviour<ActionQueryModel>
                                 });
                             }
 
-                            switch (element)
+                            if (conditions[opposite[i]] == FighterCondition.Fine)
                             {
-                                case QueryElement.Fire:
-                                    _conditionBurned[opposite[i]] = 3;
-                                    break;
-                                case QueryElement.Thunder:
-                                    _conditionParalysis[opposite[i]] = 2;
-                                    break;
-                                case QueryElement.Ice:
-                                    _conditionFrozen[opposite[i]] = 1;
-                                    break;
+                                switch (element)
+                                {
+                                    case QueryElement.Fire:
+                                        _conditionBurned[opposite[i]] = 3;
+                                        break;
+                                    case QueryElement.Thunder:
+                                        _conditionParalysis[opposite[i]] = 2;
+                                        break;
+                                    case QueryElement.Ice:
+                                        _conditionFrozen[opposite[i]] = 1;
+                                        break;
+                                }
                             }
                         }
                         break;
@@ -359,17 +373,21 @@ public class ActionQueryModel : SingletonMonoBehaviour<ActionQueryModel>
                                         isPlayer = i == 0,
                                         value = powerOfMagicAttack
                                     });
-                                    switch (element)
+                                    
+                                    if (conditions[i] == FighterCondition.Fine)
                                     {
-                                        case QueryElement.Fire:
-                                            _conditionBurned[i] = 3;
-                                            break;
-                                        case QueryElement.Thunder:
-                                            _conditionParalysis[i] = 2;
-                                            break;
-                                        case QueryElement.Ice:
-                                            _conditionFrozen[i] = 1;
-                                            break;
+                                        switch (element)
+                                        {
+                                            case QueryElement.Fire:
+                                                _conditionBurned[i] = 3;
+                                                break;
+                                            case QueryElement.Thunder:
+                                                _conditionParalysis[i] = 2;
+                                                break;
+                                            case QueryElement.Ice:
+                                                _conditionFrozen[i] = 1;
+                                                break;
+                                        }
                                     }
                                 }
                                 else
@@ -380,17 +398,21 @@ public class ActionQueryModel : SingletonMonoBehaviour<ActionQueryModel>
                                         isPlayer = i == 1,
                                         value = powerOfMagicAttack
                                     });
-                                    switch (element)
+                                    
+                                    if (conditions[opposite[i]] == FighterCondition.Fine)
                                     {
-                                        case QueryElement.Fire:
-                                            _conditionBurned[opposite[i]] = 3;
-                                            break;
-                                        case QueryElement.Thunder:
-                                            _conditionParalysis[opposite[i]] = 2;
-                                            break;
-                                        case QueryElement.Ice:
-                                            _conditionFrozen[opposite[i]] = 1;
-                                            break;
+                                        switch (element)
+                                        {
+                                            case QueryElement.Fire:
+                                                _conditionBurned[opposite[i]] = 3;
+                                                break;
+                                            case QueryElement.Thunder:
+                                                _conditionParalysis[opposite[i]] = 2;
+                                                break;
+                                            case QueryElement.Ice:
+                                                _conditionFrozen[opposite[i]] = 1;
+                                                break;
+                                        }
                                     }
                                 }
                             }
@@ -486,6 +508,7 @@ public class ActionQueryModel : SingletonMonoBehaviour<ActionQueryModel>
                             });
                         }
                         break;
+                    
                     case 6: // 状態異常フェーズ
                         switch (conditions[i])
                         {
@@ -556,7 +579,6 @@ public class ActionQueryModel : SingletonMonoBehaviour<ActionQueryModel>
                                         element = QueryElement.Normal
                                     });
                                 }
-
                                 break;
                         }
                         break;

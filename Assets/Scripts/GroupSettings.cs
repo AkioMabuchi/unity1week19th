@@ -15,23 +15,29 @@ public class GroupSettings : SingletonMonoBehaviour<GroupSettings>
     [SerializeField] private GameObject gameObjectSliderSound;
 
     [SerializeField] private GameObject[] gameObjectsButtonsAvatar = new GameObject[2];
-    [SerializeField] private GameObject[] gameObjectsTextMeshProsAvatar = new GameObject[2];
+
+    [SerializeField] private GameObject gameObjectButtonDescriptionOn;
+    [SerializeField] private GameObject gameObjectButtonDescriptionOff;
 
     private Slider _sliderMusic;
     private Slider _sliderSound;
     
     private readonly Button[] _buttonsAvatar = new Button[2];
-    private readonly TextMeshProUGUI[] _textMeshProsAvatar = new TextMeshProUGUI[2];
-    
+
+    private Button _buttonDescriptionOn;
+    private Button _buttonDescriptionOff;
+
     private readonly Subject<float> _onValueChangedMusic = new Subject<float>();
     private readonly Subject<float> _onValueChangedSound = new Subject<float>();
     private readonly Subject<int> _onClickAvatar = new Subject<int>();
+    private readonly Subject<bool> _onClickDescription = new Subject<bool>();
     private readonly Subject<Unit> _onPointerUpSound = new Subject<Unit>();
     private readonly Subject<Unit> _onClickFinish = new Subject<Unit>();
     
     public IObservable<float> OnValueChangedMusic => _onValueChangedMusic;
     public IObservable<float> OnValueChangedSound => _onValueChangedSound;
     public IObservable<int> OnClickAvatar => _onClickAvatar;
+    public IObservable<bool> OnClickDescription => _onClickDescription;
     public IObservable<Unit> OnPointerUpSound => _onPointerUpSound;
     public IObservable<Unit> OnClickFinish => _onClickFinish;
 
@@ -43,8 +49,10 @@ public class GroupSettings : SingletonMonoBehaviour<GroupSettings>
         for (int i = 0; i < 2; i++)
         {
             _buttonsAvatar[i] = gameObjectsButtonsAvatar[i].GetComponent<Button>();
-            _textMeshProsAvatar[i] = gameObjectsTextMeshProsAvatar[i].GetComponent<TextMeshProUGUI>();
         }
+
+        _buttonDescriptionOn = gameObjectButtonDescriptionOn.GetComponent<Button>();
+        _buttonDescriptionOff = gameObjectButtonDescriptionOff.GetComponent<Button>();
     }
 
     public void OnValueChangedSliderMusic()
@@ -66,6 +74,12 @@ public class GroupSettings : SingletonMonoBehaviour<GroupSettings>
     {
         _onClickAvatar.OnNext(id);
     }
+
+    public void OnClickButtonDescription(bool s)
+    {
+        _onClickDescription.OnNext(s);
+    }
+    
     public void OnClickButtonFinish()
     {
         _onClickFinish.OnNext(Unit.Default);
@@ -88,13 +102,25 @@ public class GroupSettings : SingletonMonoBehaviour<GroupSettings>
             if (i == id)
             {
                 _buttonsAvatar[i].image.sprite = spriteSettingButtonAvatarSelected;
-                _textMeshProsAvatar[i].color = new Color(0.0f, 0.0f, 0.0f);
             }
             else
             {
                 _buttonsAvatar[i].image.sprite = spriteSettingButtonAvatar;
-                _textMeshProsAvatar[i].color = new Color(0.0f, 0.0f, 0.0f);
             }
+        }
+    }
+
+    public void SetDescription(bool s)
+    {
+        if (s)
+        {
+            _buttonDescriptionOn.image.sprite = spriteSettingButtonAvatarSelected;
+            _buttonDescriptionOff.image.sprite = spriteSettingButtonAvatar;
+        }
+        else
+        {
+            _buttonDescriptionOn.image.sprite = spriteSettingButtonAvatar;
+            _buttonDescriptionOff.image.sprite = spriteSettingButtonAvatarSelected;
         }
     }
 }

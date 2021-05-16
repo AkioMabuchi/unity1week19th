@@ -45,6 +45,16 @@ public class ResultSceneManager : PresenterMonoBehaviour
         
         GroupFadeEffect.Instance.FadeOut();
         
+        switch (_result)
+        {
+            case GameResult.Win:
+                ResultMusicPlayer.Instance.StartMusicWin();
+                break;
+            case GameResult.Lose:
+                ResultMusicPlayer.Instance.StartMusicLose();
+                break;
+        }
+        
         yield return new WaitForSeconds(2.0f);
         
         GroupResult.Instance.ShowButtons();

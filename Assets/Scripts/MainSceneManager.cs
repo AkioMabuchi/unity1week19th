@@ -64,11 +64,17 @@ public class MainSceneManager : PresenterMonoBehaviourPunCallbacks
     private int _selectedCard = -1;
     
     private bool _hasOpponentRun = false;
-    
-    
+
+    private Card[] _cards = new Card[0];
+    private bool _isDescriptionActive = true;
 
     private void Start()
     {
+        Disposables.Add(CardListModel.Instance.PropertyCards.Subscribe(cards =>
+        {
+            _cards = cards;
+        }));
+        
         Disposables.Add(GroupConnection.Instance.OnClickReturn.Subscribe(_ =>
         {
             SoundPlayer.Instance.PlaySound(2);
@@ -190,6 +196,11 @@ public class MainSceneManager : PresenterMonoBehaviourPunCallbacks
             SceneController.Instance.ChangeScene("MainScene", "ResultScene");
         }));
         
+        Disposables.Add(DescriptionModel.Instance.IsDescriptionActive.Subscribe(s =>
+        {
+            _isDescriptionActive = s;
+        }));
+        
         PhotonNetwork.GameVersion = "Version 1.0.0";
 
         this.UpdateAsObservable()
@@ -203,6 +214,7 @@ public class MainSceneManager : PresenterMonoBehaviourPunCallbacks
                             _phrase = MainScenePhrase.StartCall;
                             SoundPlayer.Instance.PlaySound(6);
                             GroupMain.Instance.ShowCallBanner("対戦開始!");
+                            ActionQueryModel.Instance.Initialize();
                         }
                         break;
                     case MainScenePhrase.StartCall:
@@ -341,6 +353,28 @@ public class MainSceneManager : PresenterMonoBehaviourPunCallbacks
                 GroupMain.Instance.UpdateFighterCardQuantity(_opponentCardQuantity, 1);
                 GroupMain.Instance.DrawPlayerCards(_playerCardHand, _playerSelectedCard1, _playerSelectedCard2);
                 GroupMain.Instance.DrawOpponentCards(_opponentCardHand);
+            });
+
+        this.UpdateAsObservable()
+            .Where(_ => _isDescriptionActive)
+            .Subscribe(_ =>
+            {
+                if (_selectedCard >= 0)
+                {
+                    int index = _playerCardHand[_selectedCard];
+                    if (index >= 0 && index < _cards.Length)
+                    {
+                        GroupMain.Instance.ShowDescription(_cards[index].name, _cards[index].description);
+                    }
+                    else
+                    {
+                        GroupMain.Instance.HideDescription();
+                    }
+                }
+                else
+                {
+                    GroupMain.Instance.HideDescription();
+                }
             });
         
         _coroutines.Add(StartCoroutine(CoroutineServerConnection()));
@@ -482,6 +516,8 @@ public class MainSceneManager : PresenterMonoBehaviourPunCallbacks
             count++;
         }
 
+        yield return new WaitForSeconds(0.1f);
+        
         if (_fighterOpponent != null)
         {
             _opponentUserName = _fighterOpponent.UserName;
@@ -491,7 +527,7 @@ public class MainSceneManager : PresenterMonoBehaviourPunCallbacks
         GroupConnection.Instance.HideMatchMaking();
         GroupConnection.Instance.ShowOpponentInformation(_opponentUserName, _opponentAvatarId);
 
-        yield return new WaitForSeconds(5.0f);
+        yield return new WaitForSeconds(2.0f);
 
         int timer = 3;
         GroupConnection.Instance.ShowCountDown();
@@ -535,12 +571,12 @@ public class MainSceneManager : PresenterMonoBehaviourPunCallbacks
         {
             for (int i = 0; i < 6; i++)
             {
-                yield return new WaitForSeconds(0.6f);
+                yield return new WaitForSeconds(0.3f);
                 _fighterPlayer.DrawCard(i);
             }
         }
         
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.2f);
 
         _fighterPlayer?.SetReadyCode(1);
     }
@@ -562,9 +598,9 @@ public class MainSceneManager : PresenterMonoBehaviourPunCallbacks
             condition = _opponentCondition
         });
         GroupMain.Instance.InitializeAnnounceBoard();
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(0.8f);
         GroupMain.Instance.ShowAnnounceBoard();
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(0.8f);
         GroupMain.Instance.ClearFieldCards(_playerSelectedCard1, _playerSelectedCard2, _opponentSelectedCard1,
             _opponentSelectedCard2);
 
@@ -574,7 +610,7 @@ public class MainSceneManager : PresenterMonoBehaviourPunCallbacks
         {
             string text = "";
             int sound = 0;
-            yield return new WaitForSeconds(1.0f);
+            yield return new WaitForSeconds(0.8f);
             switch (query.type)
             {
                 case QueryType.Nothing:
@@ -585,7 +621,7 @@ public class MainSceneManager : PresenterMonoBehaviourPunCallbacks
                 case QueryType.SlashAttack:
                     if (query.isPlayer)
                     {
-                        text = _playerUserName + "は、" + _opponentUserName + "に向かって剣を振った！";
+                        text = _playerUserName + "は、" + _opponentUserName + "に向かって斬撃！";
                     }
                     else
                     {
@@ -727,9 +763,9 @@ public class MainSceneManager : PresenterMonoBehaviourPunCallbacks
                         if (query.value > 0)
                         {
                             queryPlayerHp += query.value;
-                            if (queryPlayerHp > 10)
+                            if (queryPlayerHp > 15)
                             {
-                                queryPlayerHp = 10;
+                                queryPlayerHp = 15;
                             }
 
                             _fighterPlayer?.SetHp(queryPlayerHp);
@@ -746,9 +782,9 @@ public class MainSceneManager : PresenterMonoBehaviourPunCallbacks
                         if (query.value > 0)
                         {
                             queryOpponentHp += query.value;
-                            if (queryOpponentHp > 10)
+                            if (queryOpponentHp > 15)
                             {
-                                queryOpponentHp = 10;
+                                queryOpponentHp = 15;
                             }
                             
                             GroupMain.Instance.UpdateFighterHp(queryOpponentHp, 1);
@@ -891,7 +927,7 @@ public class MainSceneManager : PresenterMonoBehaviourPunCallbacks
             }
         }
 
-        yield return new WaitForSeconds(2.0f);
+        yield return new WaitForSeconds(1.0f);
         GroupMain.Instance.HideAnnounceBoard();
         yield return new WaitForSeconds(1.0f);
         _fighterPlayer?.SetReadyCode(5);

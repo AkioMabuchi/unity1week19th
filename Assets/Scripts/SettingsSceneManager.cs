@@ -19,6 +19,11 @@ public class SettingsSceneManager : PresenterMonoBehaviour
             AvatarModel.Instance.SetAvatarId(id);
         }));
         
+        Disposables.Add(GroupSettings.Instance.OnClickDescription.Subscribe(s =>
+        {
+            DescriptionModel.Instance.SetDescription(s);
+        }));
+        
         Disposables.Add(GroupSettings.Instance.OnPointerUpSound.Subscribe(_ =>
         {
             // 効果音調整用のスライダーが離されると、テスト効果音を鳴らす。
@@ -44,6 +49,11 @@ public class SettingsSceneManager : PresenterMonoBehaviour
         Disposables.Add(AvatarModel.Instance.AvatarId.Subscribe(id =>
         {
             GroupSettings.Instance.SetAvatarId(id);
+        }));
+        
+        Disposables.Add(DescriptionModel.Instance.IsDescriptionActive.Subscribe(s =>
+        {
+            GroupSettings.Instance.SetDescription(s);
         }));
     }
 }

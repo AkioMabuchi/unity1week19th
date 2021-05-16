@@ -50,12 +50,14 @@ public class GroupPrepare : SingletonMonoBehaviour<GroupPrepare>
     private readonly Subject<int> _onClickDecrease = new Subject<int>();
     private readonly Subject<string> _onChangeUserName = new Subject<string>();
     private readonly Subject<Unit> _onClickLogin = new Subject<Unit>();
+    private readonly Subject<Unit> _onClickDefaultDeck = new Subject<Unit>();
 
     public IObservable<Unit> OnClickReturn => _onClickReturn;
     public IObservable<int> OnClickIncrease => _onClickIncrease;
     public IObservable<int> OnClickDecrease => _onClickDecrease;
     public IObservable<string> OnChangeUserName => _onChangeUserName;
     public IObservable<Unit> OnClickLogin => _onClickLogin;
+    public IObservable<Unit> OnClickDefaultDeck => _onClickDefaultDeck;
 
     private Card[] _cards;
 
@@ -123,6 +125,10 @@ public class GroupPrepare : SingletonMonoBehaviour<GroupPrepare>
         _onClickLogin.OnNext(Unit.Default);
     }
 
+    public void OnClickButtonDefaultDeck()
+    {
+        _onClickDefaultDeck.OnNext(Unit.Default);
+    }
     public void OnPointerEnterCardName(int index)
     {
         int i = _page * 7 + index;
@@ -200,12 +206,12 @@ public class GroupPrepare : SingletonMonoBehaviour<GroupPrepare>
         }
 
         _textMeshProQuantity.text = "カード枚数: " + amount + " / 50";
-        _textMeshProCosts.text = "カードコスト: " + cost + " / 20";
+        _textMeshProCosts.text = "カードコスト: " + cost + " / 25";
 
         _buttonPrev.interactable = _page > 0;
         _buttonNext.interactable = _page * 7 + 7 < _cards.Length;
 
-        _buttonLogin.interactable = amount == 50 && cost <= 20 && _inputFieldUserName.text != "";
+        _buttonLogin.interactable = amount == 50 && cost <= 25 && _inputFieldUserName.text != "";
     }
 
     public void SetCardDeck(int[] cardDeck)

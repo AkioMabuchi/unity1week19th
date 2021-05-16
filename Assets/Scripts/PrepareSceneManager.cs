@@ -49,5 +49,10 @@ public class PrepareSceneManager : PresenterMonoBehaviour
             SoundPlayer.Instance.PlaySound(1);
             SceneController.Instance.ChangeScene("PrepareScene", "MainScene");
         }));
+        
+        Disposables.Add(GroupPrepare.Instance.OnClickDefaultDeck.Subscribe(_ =>
+        {
+            CardDeckModel.Instance.SetDefaultDeck();
+        }));
     }
 }

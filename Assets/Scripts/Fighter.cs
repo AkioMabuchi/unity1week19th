@@ -66,7 +66,7 @@ public class Fighter : MonoBehaviourPunCallbacks, IPunObservable, IFighter
     private int[] _cardDeck = new int[0];
     private int _cardDeckIndex = 0;
     private int[] _cardHand = {-1, -1, -1, -1, -1, -1};
-    private int _hp = 10;
+    private int _hp = 15;
     private FighterSword _sword = FighterSword.Normal;
     private FighterCondition _condition = FighterCondition.Fine;
     private int _selectedCard1 = -1;
